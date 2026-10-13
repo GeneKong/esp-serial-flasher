@@ -1,0 +1,2 @@
+# Stable register/timing reference for the standalone P4 CTest.
+esptool==5.3.1

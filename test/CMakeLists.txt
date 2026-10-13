@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(serial_flasher_test)
 
-# Independent of the QEMU TCP port; run with pip install esptool==5.3.1.
+# Independent of QEMU; install requirements_p4_flash_power.txt before running CTest.
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_executable(p4_flash_power_test test_p4_flash_power.c)
 target_include_directories(p4_flash_power_test PRIVATE ../include ../private_include)

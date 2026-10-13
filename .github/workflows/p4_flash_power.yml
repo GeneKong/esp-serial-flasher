@@ -1,0 +1,36 @@
+name: P4 flash power regression
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p4_flash_power:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install reference implementation
+        run: python -m pip install -r test/requirements_p4_flash_power.txt
+
+      - name: Build library and run P4 regression
+        run: |
+          cmake -S . -B build-library -DPORT=USER_DEFINED
+          cmake --build build-library --parallel
+          cmake -S test -B build-test
+          cmake --build build-test --target p4_flash_power_test
+          ctest --test-dir build-test -R '^p4_flash_power$' --output-on-failure --no-tests=error

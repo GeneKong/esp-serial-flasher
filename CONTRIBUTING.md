@@ -73,6 +73,24 @@ pre-commit install
 
 This will automatically run linters and formatters on your code before each commit.
 
+### P4 Flash Power Regression
+
+The standalone host regression compares the production P4 Flash power sequence
+with esptool 5.3.1, including ECO6/ECO7 handling, minimum delays, I/O failures and
+the secure-download, other-target and non-serial skip paths. It needs a C/C++
+compiler, CMake 3.22 or newer and Python 3.10 or newer; no target board or QEMU
+server is required.
+
+```sh
+python -m pip install -r test/requirements_p4_flash_power.txt
+cmake -S test -B build-test
+cmake --build build-test --target p4_flash_power_test
+ctest --test-dir build-test -R '^p4_flash_power$' --output-on-failure --no-tests=error
+```
+
+GitHub Actions and GitLab CI run this regression and build the complete
+`USER_DEFINED` library. The QEMU tests remain a separate job.
+
 ## Documentation
 
 ### Updating Documentation
